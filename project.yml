@@ -1,0 +1,40 @@
+# Full build: app + Captain Camera virtual webcam (CoreMediaIO camera extension).
+# System extensions need a paid Apple Developer Program team; set CAPTAIN_TEAM_ID.
+include:
+  - base.yml
+
+targets:
+  Captain:
+    entitlements:
+      properties:
+        com.apple.developer.system-extension.install: true
+    dependencies:
+      - target: CameraExtension
+
+  CameraExtension:
+    type: system-extension
+    platform: macOS
+    sources:
+      - path: CameraExtension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.garand.captain.CameraExtension
+        PRODUCT_NAME: $(PRODUCT_BUNDLE_IDENTIFIER)
+        SKIP_INSTALL: YES
+    info:
+      path: CameraExtension/Info.plist
+      properties:
+        CFBundleDisplayName: Captain Camera
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        LSMinimumSystemVersion: $(MACOSX_DEPLOYMENT_TARGET)
+        NSSystemExtensionUsageDescription: Provides the Captain Camera virtual webcam.
+        CMIOExtension:
+          CMIOExtensionMachServiceName: $(TeamIdentifierPrefix)com.garand.captain.CameraExtension
+    entitlements:
+      path: CameraExtension/CameraExtension.entitlements
+      properties:
+        com.apple.security.app-sandbox: true
+        com.apple.security.application-groups:
+          - $(TeamIdentifierPrefix)com.garand.captain

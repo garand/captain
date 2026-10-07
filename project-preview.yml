@@ -1,0 +1,4 @@
+# Preview build: the app without the virtual camera extension.
+# Works with a free personal team (which can't sign system extensions).
+include:
+  - base.yml
